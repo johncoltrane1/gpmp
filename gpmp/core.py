@@ -179,6 +179,8 @@ class Model:
         self.mean = mean
         self.covariance = covariance
 
+        self.cholesky = None
+
     def __repr__(self):
         output = str("<gpmp.core.Model object> " + hex(id(self)))
         return output
