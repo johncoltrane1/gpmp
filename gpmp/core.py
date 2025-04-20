@@ -194,7 +194,7 @@ class Model:
         Kii = self.covariance(xi, xi, self.covparam)
         Kit = self.covariance(xi, xt, self.covparam)
 
-        if self.cholesky is None:
+        if self.cholesky is None or (self.cholesky[1].shape != xi.shape):
             self.cholesky = [gnp.cholesky(Kii, lower=True), xi, self.covparam, self.meantype]
         else:
             assert ((self.cholesky[1] == xi).all() and (self.cholesky[2] == self.covparam).all()
