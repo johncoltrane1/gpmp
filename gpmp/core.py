@@ -192,7 +192,13 @@ class Model:
         Kii = self.covariance(xi, xi, self.covparam)
         Kit = self.covariance(xi, xt, self.covparam)
 
-        lambda_t = gnp.cholesky_solve(Kii, Kit)[0]
+        if self.cholesky is None:
+            self.cholesky = [gnp.cholesky(Kii, lower=True), xi, self.covparam, self.meantype]
+        else:
+            assert ((self.cholesky[1] == xi).all() and (self.cholesky[2] == self.covparam).all()
+                    and self.cholesky[3] == self.meantype), (self.cholesky, xi, self.covparam, self.meantype)
+
+        lambda_t = gnp.solve_from_cholesky(self.cholesky[0], Kit, lower=True)
 
         if return_type == -1:
             zt_posterior_variance = None
